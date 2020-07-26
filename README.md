@@ -51,7 +51,9 @@ module "example_bastion" {
 
 | Name | Description |
 |------|-------------|
-| bastion_private_ip | Private IP of the bastion host |
+| private_ip | Private IP of the bastion host |
+| public_ip | Public IP of the bastion host |
+| name | name of the Bastion (in the AWS console) |
 
 ## License
 
