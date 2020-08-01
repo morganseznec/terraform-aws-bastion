@@ -1,3 +1,6 @@
+# Get current Region
+data "aws_region" "region" {} 
+
 # Get latest Amazon AMI
 data "aws_ami" "amazon" {
   most_recent = true
@@ -20,10 +23,10 @@ resource "aws_subnet" "public_subnet" {
   vpc_id                  = var.vpc_id
   cidr_block              = var.public_subnet_cidr != "" ? var.public_subnet_cidr : cidrsubnet(data.aws_vpc.vpc.cidr_block, 12, 15)
   map_public_ip_on_launch = true
-  availability_zone       = join("", [var.region, var.availability_zone])
+  availability_zone       = join("", [data.aws_region.region.name, var.availability_zone])
 
   tags = {
-    Name = "subnet-${var.region_short[var.region]}-${var.env}-${var.project}-bastion"
+    Name = "subnet-${var.region_short[data.aws_region.region.name]}-${var.env}-${var.project}-bastion"
   }
 }
 
@@ -31,7 +34,7 @@ resource "aws_subnet" "public_subnet" {
 # Create security group for the Bastion instance
 resource "aws_security_group" "sg_bastion" {
   vpc_id = var.vpc_id
-  name   = "security-group-${var.region_short[var.region]}-${var.env}-${var.project}-bastion"
+  name   = "security-group-${var.region_short[data.aws_region.region.name]}-${var.env}-${var.project}-bastion"
   ingress {
     from_port   = var.ssh_port
     to_port     = var.ssh_port
@@ -47,7 +50,7 @@ resource "aws_security_group" "sg_bastion" {
   }
 
   tags = {
-    Name = "security-group-${var.region_short[var.region]}-${var.env}-${var.project}-bastion"
+    Name = "security-group-${var.region_short[data.aws_region.region.name]}-${var.env}-${var.project}-bastion"
   }
 }
 
@@ -75,6 +78,6 @@ resource "aws_instance" "bastion" {
   private_ip = cidrhost(var.public_subnet_cidr != "" ? var.public_subnet_cidr : cidrsubnet(data.aws_vpc.vpc.cidr_block, 12, 15), 5)
 
   tags = {
-    Name = "ec2-${var.region_short[var.region]}-${var.availability_zone}-${var.env}-${var.project}-bastion"
+    Name = "ec2-${var.region_short[data.aws_region.region.name]}-${var.availability_zone}-${var.env}-${var.project}-bastion"
   }
 }

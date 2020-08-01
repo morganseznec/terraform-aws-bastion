@@ -15,7 +15,6 @@ Features:
 module "example_bastion" {
   source                         = "github.com/morganseznec/terraform-aws-bastion"
   project                        = "myproject"
-  region                         = "us-east-1"
   vpc_id                         = aws_vpc.vpc.id
   public_subnet_cidr             = "192.168.254.0/30"
   key_name                       = "deployer"
@@ -35,7 +34,6 @@ module "example_bastion" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | project | Project name | `string` | `""` | yes |
-| region | AWS region | `string` | `""` | yes |
 | availability_zone | Availability zone (a, b, c, d) | `string` | `"a"` | no |
 | vpc_id | VPC ID | `string` | `""` | yes |
 | ssh_port | SSH port number | `number` | `22` | no |
