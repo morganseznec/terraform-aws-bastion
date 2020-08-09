@@ -12,3 +12,8 @@ output "name" {
   value       = "ec2-${var.region_short[data.aws_region.region.name]}-${var.availability_zone}-${var.env}-${var.project}-bastion"
   description = "The bastion name (in the AWS console)"
 }
+
+output "id" {
+  value       = aws_instance.bastion.id
+  description = "The instance ID of the bastion"
+}
